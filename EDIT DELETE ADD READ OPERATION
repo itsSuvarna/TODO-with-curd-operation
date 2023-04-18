@@ -1,0 +1,64 @@
+import React,{ useState } from "react"
+
+function App(){
+const[addTodo,setAddTodo]=useState("")
+const[todoList,setTodoList]=useState([])
+const[editId,setEditId]=useState(-1);
+
+const handleTodo=()=>{
+if(addTodo !== ""){
+  if(editId !== -1){    //if edit index not -1,then we are in edit mode
+   const editTodo ={id:editId, todos:addTodo}
+   setTodoList(todoList.splice(editId,1))
+   setTodoList([...todoList,editTodo])
+   setAddTodo("")
+   setEditId(-1)
+
+
+  }
+  const newTodo={id:Math.random(),todos:addTodo}
+  setTodoList([...todoList,newTodo])
+  setAddTodo("")
+
+}
+}
+
+const handleDelete =(id)=>{
+  setTodoList(todoList.filter((x)=>x.id !==id))
+}
+
+const handleEdit=(id,todos)=>{
+      setAddTodo(todos);
+      setEditId(id)
+}
+
+  return(
+    <>
+       <div>
+         <h1>ADD TODO</h1>
+         <input
+         type="text"
+         value={addTodo}
+         onChange={(e)=>setAddTodo(e.target.value)}
+         />
+         <button onClick={handleTodo}>addTodo</button>
+         
+       </div>
+       {todoList.map((x)=>{
+         return(
+           <>
+           <div key={x.id}>
+           {x.todos}
+           <button onClick={()=>handleDelete(x.id)}>delete</button>
+           <button onClick={()=>handleEdit(x.id,x.todos)}>Edit</button>
+           </div>
+           </>
+         )
+       })}
+        
+        
+
+    </>
+  )
+  }
+  export default App
